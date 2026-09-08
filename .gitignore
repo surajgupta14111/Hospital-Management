@@ -1,0 +1,33 @@
+## Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+## .NET
+bin/
+obj/
+**/bin/
+**/obj/
+*.db
+*.log
+
+## IIS Express
+/.vs/*/config/applicationhost.config
+
+## JetBrains Rider
+.idea/
+
+## Dist
+Frontend/dist/
