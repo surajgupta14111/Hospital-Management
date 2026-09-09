@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile to build Angular frontend and .NET 10 backend
+# Multi-stage Dockerfile to build Angular frontend and .NET backend
 # Stage 1: build frontend with Node
 FROM node:18-bullseye-slim AS node_build
 WORKDIR /src/frontend
@@ -18,19 +18,19 @@ WORKDIR /src
 # Copy full repository
 COPY . ./
 
-# Clean target wwwroot and copy frontend build output into backend wwwroot
-RUN rm -rf Backend/AppointMentBooking/AppointMentBooking/wwwroot || true
-COPY --from=node_build /src/frontend/dist ./Backend/AppointMentBooking/AppointMentBooking/wwwroot
+# Remove any existing wwwroot in backend and copy frontend build output into backend wwwroot
+RUN rm -rf Backend/AppointmentBooking/wwwroot || true
+COPY --from=node_build /src/frontend/dist ./Backend/AppointmentBooking/wwwroot
 
-# Publish the backend
-RUN dotnet publish Backend/AppointMentBooking/AppointMentBooking -c Release -o /app/publish /p:UseAppHost=false
+# Publish the backend project
+RUN dotnet publish Backend/AppointmentBooking/AppointMentBooking.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 3: runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish ./
 
-# Expose port configured in launchSettings / appsettings
-EXPOSE 5032
+# Expose port (adjust if your app uses a different port)
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "AppointMentBooking.dll"]
